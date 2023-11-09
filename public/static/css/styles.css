@@ -550,4 +550,7 @@ nav ul li {
     flex: 1;
     max-width: 35%; /* Adjust based on your design */
     /* Additional styles if needed */
+    @media (max-width: 575.98px) {
+        font-size: 15px;
+    }
 }
