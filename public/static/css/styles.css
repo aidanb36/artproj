@@ -26,6 +26,7 @@ body {
 .containernav {
     width: 95%;
     margin: 0 auto;
+    position: relative; /* Add relative positioning */
 }
 .container {
     width: 80%;
@@ -153,219 +154,10 @@ nav a:hover::before {
     padding-top: 2%;
     padding-bottom: 2%;
 }
-.explanation {
-    text-align: center;
-    text-transform: uppercase;
-    margin-top: 1%;
-}
-.row{
-    padding: 5vh 0;
-    text-align: center;
-    display: flex;
-    justify-content: space-around;
-    flex-direction: column;
-}
 
-.step {
-    width: 30%;
-    padding: 1%;
-    border-style: solid;
-    border-width: 0.1rem;
-    background: #f4f4f4;
-    box-shadow: var(--shadow);
-}
-.step h1{
-    margin-bottom: 3%;
-}
 
 /* GALLERY
 ===================================*/
-.ending {
-    display: grid;
-    padding-left: 22vh;
-    padding-right: 22vh;
-    padding-bottom: 10vh;
-    grid-template-columns: 1fr 1fr;
-    min-width: 100%;
-    min-height: 100%;
-}
-.gallery {
-    padding: 0;
-}
-.portfolio {
-    display: grid;
-    height: 100%;
-    width: auto;
-    grid-template-rows: repeat(15, 1fr);
-    grid-template-columns: repeat(6, 1fr);
-    grid-gap: 20px;
-    object-fit: cover;
-}
-.portfolio-item {
-    font-weight: 300;
-    color: black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    object-fit: cover;
-}
-.portfolio-item.medium{
-    grid-row: span 5;
-    grid-column: span 2;
-    object-fit: cover;
-}
-.portfolio-item.tall{
-    grid-row: span 6;
-    grid-column: span 2;
-    object-fit: cover;
-}
-
-.one {
-    background-image: url(/images/image0.jpeg);
-    background-size: cover;
-    overflow: hidden;
-}
-.two {
-    background-image: url(/images/image1.jpeg);
-    background-size: cover;
-    background-position: center;
-}
-.three {
-    background-image: url(/images/image2.jpeg);
-    background-size: cover;
-}
-.four {
-    background-image: url(/images/image4.jpeg);
-    background-size: cover;
-}
-.five{
-    background-image: url(/images/image3.jpeg);
-    background-size: cover;
-}
-.six{
-    background-image: url(/images/image5.jpeg);
-    background-size: cover;
-}
-.seven{
-    background-image: url(/images/image6.jpeg);
-    background-size: cover;
-}
-.eight{
-    background-image: url(/images/IMG_1194.jpg);
-    background-size: cover;
-    background-position: center;
-}
-.nine{
-    background-image: url(/images/bunny.jpeg);
-    background-size: cover;
-    background-position: center;
-}
-.ten{
-    background-image: url(/images/cat2.jpeg);
-    background-size: cover;
-    background-position: center;
-}.eleven{
-    background-image: url(/images/anime.jpeg);
-    background-size: cover;
-    background-position: center;
-}
-
-.desc{
-    visibility: hidden;
-}
-.one:hover .desc,
-.two:hover .desc,
-.three:hover .desc,
-.four:hover .desc {
-    visibility: visible;
-    color: white;
-}
-.five:hover .desc{
-        visibility: visible;
-    color: white;
-}
-.six:hover .desc{
-        visibility: visible;
-    color: white;
-}
-.seven:hover .desc{
-    visibility: visible;
-    color: white;
-}.eight:hover .desc{
-    visibility: visible;
-    color: white;
-}.nine:hover .desc{
-    visibility: visible;
-    color: white;
-}.ten:hover .desc{
-    visibility: visible;
-    color: white;
-}.eleven:hover .desc{
-    visibility: visible;
-    color: white;
-}
-.one:hover {
-    background-color: rgba(104, 104, 104, 0.9);
-    background-blend-mode: multiply;
-    transition: ease-in-out 250ms;
-    box-shadow: var(--shadow);
-}
-.two:hover {
-    background-color: rgba(104, 104, 104, 0.9);
-    background-blend-mode: multiply;
-    transition: ease-in-out 250ms;
-    box-shadow: var(--shadow);
-}
-.three:hover {
-    background-color: rgba(104, 104, 104, 0.9);
-    background-blend-mode: multiply;
-    transition: ease-in-out 250ms;
-    box-shadow: var(--shadow);
-}
-.four:hover {
-    background-color: rgba(104, 104, 104, 0.9);
-    background-blend-mode: multiply;
-    transition: ease-in-out 250ms;
-    box-shadow: var(--shadow);
-}
-.five:hover {
-    background-color: rgba(104, 104, 104, 0.9);
-    background-blend-mode: multiply;
-    transition: ease-in-out 250ms;
-    box-shadow: var(--shadow);
-}
-.six:hover {
-    background-color: rgba(104, 104, 104, 0.9);
-    background-blend-mode: multiply;
-    transition: ease-in-out 250ms;
-    box-shadow: var(--shadow);
-}
-.seven:hover {
-    background-color: rgba(104, 104, 104, 0.9);
-    background-blend-mode: multiply;
-    transition: ease-in-out 250ms;
-    box-shadow: var(--shadow);
-}.eight:hover {
-    background-color: rgba(104, 104, 104, 0.9);
-    background-blend-mode: multiply;
-    transition: ease-in-out 250ms;
-    box-shadow: var(--shadow);
-}.nine:hover {
-    background-color: rgba(104, 104, 104, 0.9);
-    background-blend-mode: multiply;
-    transition: ease-in-out 250ms;
-    box-shadow: var(--shadow);
-}.ten:hover {
-    background-color: rgba(104, 104, 104, 0.9);
-    background-blend-mode: multiply;
-    transition: ease-in-out 250ms;
-    box-shadow: var(--shadow);
-}.eleven:hover {
-    background-color: rgba(104, 104, 104, 0.9);
-    background-blend-mode: multiply;
-    transition: ease-in-out 250ms;
-    box-shadow: var(--shadow);
-}
 /* CONTACT ME FORM
 ===================================*/
 .contact h1 {
@@ -441,84 +233,26 @@ footer h1{
 footer p{
     text-transform: uppercase;
 }
-.about-section {
-    padding-left: 10px; /* Adjust this value to increase or decrease the space */
-}
+
 /* Small devices (portrait phones, 576px and up) */
 @media (max-width: 575.98px) {
-  .container {
-    width: 90%;
-  }
-
+    .container {
+      width: 90%;
+    }
+  
     .containernav {
-        width: 100%;
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 1000;
-        background-color: rgb(221, 216, 216);
+      width: 100%;
+      height: auto;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      background-color: rgb(221, 216, 216);
+      padding: 10px 0; /* Add some padding */
+      position: relative; /* Add relative positioning */
+
     }
-    .contact{
-        margin-top: 35px;
-    }
-  .logo {
-    max-width: 30%;
   }
-
-  .intro {
-  padding: 15em 0; /* Increase top padding to avoid content overlap */
-  height: auto;
-}
-  .logo{
-      max-width: 15%;
-  }
-
-  #pathway .row {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .step {
-    width: 100%;
-    margin-bottom: 1em;
-  }
-
-  #pathway {
-    padding-top: 5%;
-    padding-bottom: 5%;
-  }
-
-  .ending {
-    grid-template-columns: 1fr;
-    padding-left: 2vh;
-    padding-right: 2vh;
-  }
-
-  .input-row {
-    flex-direction: column;
-  }
-
-  .input-row .input-group {
-    flex-basis: 100%;
-    margin-bottom: 1em;
-  }
-
-  .about-section {
-    padding-left: 0;
-  }
-  nav ul {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 0;
-  margin: 0;
-}
-
-nav ul li {
-  list-style-type: none;
-}
-
-}
 
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
@@ -533,23 +267,19 @@ nav ul li {
 }
 
 .content-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: flex-start; /* Align items to the start of the container */
-    margin: 20px 0; /* Added some margin for spacing */
-}
+    width: 100%; /* Set to full width */
+    max-width: none; /* Remove any maximum width constraints */
+    margin: 0; /* Optional: Remove margin if present */
+    padding: 0; /* Optional: Remove padding if present */
+  }
 
-.gallery {
-    flex: 1;
-    max-width: 65%; /* Adjust based on your design */
-    /* Rest of the styles remain unchanged */
-}
-.about-me {
+  .about-me {
     font-size: 25px;
-    flex: 1;
-    max-width: 35%; /* Adjust based on your design */
-    /* Additional styles if needed */
+    text-align: center; /* Center align the text */
+    margin: auto; /* Center the container */
+    max-width: 85%; /* You can adjust this value as needed */
+    margin-bottom: 40px;
+    /* For mobile view */
     @media (max-width: 575.98px) {
         font-size: 15px;
     }

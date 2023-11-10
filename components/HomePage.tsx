@@ -1,8 +1,28 @@
-import React from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import ContactForm from './Contact';
+import React, { useState, useRef, useEffect } from 'react';
+
 const HomePage: React.FC = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  const handleClickOutside = (event) => {
+    if (menuRef.current && !menuRef.current.contains(event.target)) {
+      setMenuOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   return (
     <>
       <Head>
@@ -10,6 +30,113 @@ const HomePage: React.FC = () => {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>art@mhb</title>
+        <style>
+          {`
+            .gallery2 {
+              display: grid;
+              grid-template-columns: repeat(3, 1fr); /* Creates a 3-column grid */
+              grid-gap: 30px;
+              width: 100%;
+              background-color: white;
+              margin-bottom: 40px;
+              @media (max-width: 575.98px) {
+                grid-template-columns: repeat(1, 1fr); /* Creates a 3-column grid */
+              }
+
+            }
+            
+            .portfolio-item2 {
+              position: relative;
+              overflow: hidden;
+              cursor: pointer;
+              background-size: cover;
+              background-position: center;
+              transition: transform 0.3s ease-in-out;
+              margin: 15px;
+            }
+            
+            .portfolio-item2::before {
+              content: '';
+              display: block;
+              padding-top: 100%; /* This maintains a square aspect ratio */
+            }
+            
+            .desc2 {
+              position: absolute;
+              bottom: 0;
+              width: 100%;
+              text-align: center;
+              background: rgba(0, 0, 0, 0.7);
+              color: white;
+              visibility: hidden;
+              opacity: 0;
+              transition: opacity 0.3s ease-in-out;
+              padding: 10px 0;
+            }
+            
+            .portfolio-item2:hover {
+              transform: scale(1.1);
+            }
+            
+            .portfolio-item2:hover .desc2 {
+              visibility: visible;
+              opacity: 1;
+            }
+
+            .hamburger {
+              display: flex;
+              cursor: pointer;
+              flex-direction: column;
+              justify-content: space-around;
+              width: 30px;
+              height: 25px;
+              background: transparent;
+              border: none;
+              outline: none;
+              position: absolute;
+              right: 20px; /* Adjust as needed */
+              top: 20px; /* Adjust as needed */
+            }
+            
+            .hamburger span {
+              display: block;
+              width: 100%;
+              height: 3px;
+              background-color: #333;
+              z-index: 1002; /* Ensure it's above the nav */
+
+            }
+            
+            nav {
+              position: absolute;
+              right: 20px;
+              top: 60px;
+              background-color: rgba(221, 216, 216, 0.9);
+              width: 150px; /* Adjust as needed */
+              display: none;
+              z-index: 1001;
+              display: none;
+              position: absolute;
+              right: 0;
+              top: 60px;
+              z-index: 1001;
+            }
+            
+            nav ul {
+              display: block;
+              padding: 20px;
+              text-align: right;
+            }
+            
+            nav li {
+              margin-bottom: 15px;
+            }
+            
+            nav a {
+              font-size: 14px; /* Adjust font size */
+            }
+          `}
+        </style>
       </Head>
 
       <body>
@@ -19,12 +146,18 @@ const HomePage: React.FC = () => {
             <a href="#" onClick={() => window.open('https://www.youtube.com/@blurrilines6148')}>
               <Image src="/images/mhb-removebg-preview.png" alt="logo" className="logo" width={100} height={100} />
             </a>
+            <button className="hamburger" onClick={toggleMenu}>
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
 
-            <nav>
+            <nav id="navbar" ref={menuRef} style={{ display: menuOpen ? 'block' : 'none' }}>
               <ul>
-                <li><a href="#intro">Home</a></li>
-                <li><a href="#gallery">Gallery</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#intro" onClick={toggleMenu}>Home</a></li>
+                <li><a href="#gallery" onClick={toggleMenu}>Gallery</a></li>
+                <li><a href="#about" onClick={toggleMenu}>About</a></li>
+                <li><a href="#contact" onClick={toggleMenu}>Contact</a></li>
               </ul>
             </nav>
           </div>
@@ -44,50 +177,47 @@ const HomePage: React.FC = () => {
         </section>
         {/* INTRODUCTION ENDS HERE */}
 
-        {/* PATHWAY STARTS HERE */}
-        <section id="pathway" className="pathway">
-          <div className="container">
-            <div className="explanation">
-              <h1>How it works</h1>
-            </div>
-            <div className="row">
-              <div className="step">
-                <h2>Have an idea</h2>
-              </div>
-              <div className="step">
-                <h2>Customise it</h2>
-              </div>
-              <div className="step">
-                <h2>Receive it</h2>
-              </div>
-            </div>
-          </div>
-        </section>
-        {/* PATHWAY ENDS HERE */}
-
         {/* GALLERY STARTS HERE */}
-        <div className="content-container">
-        <section id="gallery" className="gallery">
           <div className="container">
-            <h1>Gallery</h1>
-            <div className="portfolio">
-              <a href="/images/image0.jpeg" className="portfolio-item medium one"><p className="desc">Charcoal.</p></a>
-              <a href="/images/image1.jpeg" className="portfolio-item medium two"><p className="desc">Colored Pencil.</p></a>
-              <a href="/images/image2.jpeg" className="portfolio-item tall three"><p className="desc">Oil.</p></a>
-              <a href="/images/image4.jpeg" className="portfolio-item tall four"><p className="desc">Acrylic.</p></a>
-              <a href="/images/image3.jpeg" className="portfolio-item medium five"><p className="desc">Acrylic.</p></a>
-              <a href="/images/image5.jpeg" className="portfolio-item medium six"><p className="desc">Oil.</p></a>
-              <a href="/images/image6.jpeg" className="portfolio-item medium seven"><p className="desc">Marker.</p></a>
-              <a href="/images/IMG_1194.jpg" className="portfolio-item medium eight"><p className="desc">Print.</p></a>
-              <a href="/images/bunny.jpeg" className="portfolio-item tall nine"><p className="desc">Digital.</p></a>
-              <a href="/images/cat2.jpeg" className="portfolio-item tall ten"><p className="desc">Digital.</p></a>
-              <a href="/images/anime.jpeg" className="portfolio-item tall eleven"><p className="desc">Digital.</p></a>
+            <div className="gallery2">
+              <a href="/images/image0.jpeg" className="portfolio-item2" style={{ backgroundImage: "url('/images/image0.jpeg')" }}>
+                <div className="desc2">Charcoal</div>
+              </a>
+              <a href="/images/image1.jpeg" className="portfolio-item2" style={{ backgroundImage: "url('/images/image1.jpeg')" }}>
+                <div className="desc2">Colored Pencil</div>
+              </a>
+              <a href="/images/image2.jpeg" className="portfolio-item2" style={{ backgroundImage: "url('/images/image2.jpeg')" }}>
+                <div className="desc2">Oil</div>
+              </a>
+              <a href="/images/image4.jpeg" className="portfolio-item2" style={{ backgroundImage: "url('/images/image4.jpeg')" }}>
+                <div className="desc2">Acrylic</div>
+              </a>
+              <a href="/images/image3.jpeg" className="portfolio-item2" style={{ backgroundImage: "url('/images/image3.jpeg')" }}>
+                <div className="desc2">Acrylic</div>
+              </a>
+              <a href="/images/image5.jpeg" className="portfolio-item2" style={{ backgroundImage: "url('/images/image5.jpeg')" }}>
+                <div className="desc2">Oil</div>
+              </a>
+              <a href="/images/image6.jpeg" className="portfolio-item2" style={{ backgroundImage: "url('/images/image6.jpeg')" }}>
+                <div className="desc2">Marker</div>
+              </a>
+              <a href="/images/IMG_1194.jpg" className="portfolio-item2" style={{ backgroundImage: "url('/images/IMG_1194.jpg')" }}>
+                <div className="desc2">Print</div>
+              </a>
+              <a href="/images/bunny.jpeg" className="portfolio-item2" style={{ backgroundImage: "url('/images/bunny.jpeg')" }}>
+                <div className="desc2">Digital</div>
+              </a>
+              <a href="/images/cat2.jpeg" className="portfolio-item2" style={{ backgroundImage: "url('/images/cat2.jpeg')" }}>
+                <div className="desc2">Digital</div>
+              </a>
+              <a href="/images/anime.jpeg" className="portfolio-item2" style={{ backgroundImage: "url('/images/anime.jpeg')" }}>
+                <div className="desc2">Digital</div>
+              </a>
             </div>
           </div>
-        </section>
         {/* GALLERY ENDS HERE */}
 
-        {/* ABOUT SECTION STARTS HERE */}
+        {/* ABOUT ME SECTION STARTS HERE */}
         <section id="about" className="about-me">
           <div className="container">
             <h1>About me</h1>
@@ -100,10 +230,13 @@ const HomePage: React.FC = () => {
             </p>
           </div>
         </section>
-        </div>
-        {/* ABOUT SECTION ENDS HERE */}
+        {/* ABOUT ME SECTION ENDS HERE */}
 
-        <ContactForm />
+        {/* CONTACT FORM STARTS HERE */}
+        <section id="contact">
+          <ContactForm />
+        </section>
+        {/* CONTACT FORM ENDS HERE */}
 
         {/* FOOTER STARTS HERE */}
         <footer>
@@ -120,3 +253,6 @@ const HomePage: React.FC = () => {
 };
 
 export default HomePage;
+
+
+
