@@ -2,6 +2,8 @@ import Head from 'next/head';
 import Image from 'next/image';
 import ContactForm from './Contact';
 import React, { useState, useRef, useEffect } from 'react';
+import NextLink from 'next/link';
+import Header from '../components/Header';
 
 const HomePage: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -140,30 +142,7 @@ const HomePage: React.FC = () => {
       </Head>
 
       <body>
-        {/* NAVIGATION STARTS HERE */}
-        <header>
-          <div className="containernav">
-            <a href="#" onClick={() => window.open('https://www.youtube.com/@blurrilines6148')}>
-              <Image src="/images/mhb-removebg-preview.png" alt="logo" className="logo" width={100} height={100} />
-            </a>
-            <button className="hamburger" onClick={toggleMenu}>
-              <span></span>
-              <span></span>
-              <span></span>
-            </button>
-
-            <nav id="navbar" ref={menuRef} style={{ display: menuOpen ? 'block' : 'none' }}>
-              <ul>
-                <li><a href="#intro" onClick={toggleMenu}>Home</a></li>
-                <li><a href="#gallery" onClick={toggleMenu}>Gallery</a></li>
-                <li><a href="#about" onClick={toggleMenu}>About</a></li>
-                <li><a href="#contact" onClick={toggleMenu}>Contact</a></li>
-              </ul>
-            </nav>
-          </div>
-        </header>
-        {/* NAVIGATION ENDS HERE */}
-
+      <Header />
         {/* INTRODUCTION STARTS HERE */}
         <section id="intro" className="intro">
           <div className="container">
@@ -178,8 +157,7 @@ const HomePage: React.FC = () => {
         {/* INTRODUCTION ENDS HERE */}
 
         {/* GALLERY STARTS HERE */}
-          <div className="container">
-            <div className="gallery2">
+        <section id="gallery" className="gallery2">
               <a href="/images/image0.jpeg" className="portfolio-item2" style={{ backgroundImage: "url('/images/image0.jpeg')" }}>
                 <div className="desc2">Charcoal</div>
               </a>
@@ -213,8 +191,7 @@ const HomePage: React.FC = () => {
               <a href="/images/anime.jpeg" className="portfolio-item2" style={{ backgroundImage: "url('/images/anime.jpeg')" }}>
                 <div className="desc2">Digital</div>
               </a>
-            </div>
-          </div>
+          </section>
         {/* GALLERY ENDS HERE */}
 
         {/* ABOUT ME SECTION STARTS HERE */}
