@@ -69,7 +69,7 @@ const Header = () => {
       </NextLink>
       <NavigationLinks>
       <NextLink href="/#gallery" passHref><NavigationLink>gallery</NavigationLink></NextLink>
-        <NextLink href="/#about" passHref><NavigationLink>about me</NavigationLink></NextLink>
+        <NextLink href="/#about" passHref><NavigationLink>about</NavigationLink></NextLink>
         <NextLink href="/Shop" passHref><NavigationLink>shop</NavigationLink></NextLink>
         <NextLink href="/#contact" passHref><NavigationLink>contact</NavigationLink></NextLink>
       </NavigationLinks>
