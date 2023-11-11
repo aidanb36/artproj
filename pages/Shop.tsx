@@ -59,6 +59,15 @@ const ContactButton = styled.button`
   &:hover {
     background-color: #00337a;
   }
+  &:after {
+    content: "Buy on Etsy";  // Default content
+  }
+
+  @media (max-width: 768px) {  // Adjust breakpoint as needed
+    &:after {
+      content: "Buy One";  // Content for mobile devices
+    }
+  }
 `;
 
 const Title = styled.h1`
@@ -102,12 +111,21 @@ const Shop = () => {
             <ProductInfo>
               <ProductPrice>{product.price}</ProductPrice>
               <a href={product.etsyLink} target="_blank" rel="noopener noreferrer">
-                <ContactButton>Buy on Etsy</ContactButton>
+                <ContactButton></ContactButton>
               </a>
             </ProductInfo>
           </ProductCard>
         ))}
       </GridContainer>
+
+              {/* FOOTER STARTS HERE */}
+              <footer>
+          <div className="container">
+          <h1 style={{ marginTop: '10px' }}>Thank you</h1>
+            <p>@MHB</p>
+            <p>Stay Artistic</p>
+          </div>
+        </footer>
     </div>
   );
 };

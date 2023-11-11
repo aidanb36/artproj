@@ -218,7 +218,7 @@ const HomePage: React.FC = () => {
         {/* FOOTER STARTS HERE */}
         <footer>
           <div className="container">
-            <h1>Thank you</h1>
+          <h1 style={{ marginTop: '10px' }}>Thank you</h1>
             <p>@MHB</p>
             <p>Stay Artistic</p>
           </div>
