@@ -151,7 +151,7 @@ const HomePage: React.FC = () => {
               <span>A Collection of Art Pieces</span>
               <span>My Art. Your Design.</span>
             </h1>
-            <a href="#pathway" className="button">Let's Work Together</a>
+            <a href="/Shop" className="button">Visit my Shop</a>
           </div>
         </section>
         {/* INTRODUCTION ENDS HERE */}
