@@ -1,13 +1,30 @@
-import React, { ReactNode } from "react";
 import Head from "next/head";
+import Image from "next/image";
 import ContactForm from "./Contact";
+import React, { useState, useRef, useEffect } from "react";
+import NextLink from "next/link";
 import Header from "../components/Header";
 
-interface HomePageProps {
-  children: ReactNode;
-}
+const HomePage: React.FC = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
 
-const HomePage: React.FC<HomePageProps> = ({ children }) => {
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  const handleClickOutside = (event) => {
+    if (menuRef.current && !menuRef.current.contains(event.target)) {
+      setMenuOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   return (
     <>
       <Head>
@@ -27,6 +44,7 @@ const HomePage: React.FC<HomePageProps> = ({ children }) => {
               @media (max-width: 575.98px) {
                 grid-template-columns: repeat(1, 1fr); /* Creates a 3-column grid */
               }
+
             }
             
             .portfolio-item2 {
@@ -88,6 +106,7 @@ const HomePage: React.FC<HomePageProps> = ({ children }) => {
               height: 3px;
               background-color: #333;
               z-index: 1002; /* Ensure it's above the nav */
+
             }
             
             nav {
@@ -121,7 +140,139 @@ const HomePage: React.FC<HomePageProps> = ({ children }) => {
           `}
         </style>
       </Head>
-      {children}
+
+      <body>
+        <Header />
+        {/* INTRODUCTION STARTS HERE */}
+        <section id="intro" className="intro">
+          <div className="container">
+            <h1 className="moto">
+              Madeline's Portfolio <br />
+              <span>A Collection of Art Pieces</span>
+              <span>My Art. Your Design.</span>
+            </h1>
+            <a href="/Shop" className="button">
+              Visit my Shop
+            </a>
+          </div>
+        </section>
+        {/* INTRODUCTION ENDS HERE */}
+
+        {/* GALLERY STARTS HERE */}
+        <section id="gallery" className="gallery2">
+          <a
+            href="/images/image0.jpeg"
+            className="portfolio-item2"
+            style={{ backgroundImage: "url('/images/image0.jpeg')" }}
+          >
+            <div className="desc2">Charcoal</div>
+          </a>
+          <a
+            href="/images/image1.jpeg"
+            className="portfolio-item2"
+            style={{ backgroundImage: "url('/images/image1.jpeg')" }}
+          >
+            <div className="desc2">Colored Pencil</div>
+          </a>
+          <a
+            href="/images/image2.jpeg"
+            className="portfolio-item2"
+            style={{ backgroundImage: "url('/images/image2.jpeg')" }}
+          >
+            <div className="desc2">Oil</div>
+          </a>
+          <a
+            href="/images/image4.jpeg"
+            className="portfolio-item2"
+            style={{ backgroundImage: "url('/images/image4.jpeg')" }}
+          >
+            <div className="desc2">Acrylic</div>
+          </a>
+          <a
+            href="/images/image3.jpeg"
+            className="portfolio-item2"
+            style={{ backgroundImage: "url('/images/image3.jpeg')" }}
+          >
+            <div className="desc2">Acrylic</div>
+          </a>
+          <a
+            href="/images/image5.jpeg"
+            className="portfolio-item2"
+            style={{ backgroundImage: "url('/images/image5.jpeg')" }}
+          >
+            <div className="desc2">Oil</div>
+          </a>
+          <a
+            href="/images/image6.jpeg"
+            className="portfolio-item2"
+            style={{ backgroundImage: "url('/images/image6.jpeg')" }}
+          >
+            <div className="desc2">Marker</div>
+          </a>
+          <a
+            href="/images/IMG_1194.jpg"
+            className="portfolio-item2"
+            style={{ backgroundImage: "url('/images/IMG_1194.jpg')" }}
+          >
+            <div className="desc2">Print</div>
+          </a>
+          <a
+            href="/images/bunny.jpeg"
+            className="portfolio-item2"
+            style={{ backgroundImage: "url('/images/bunny.jpeg')" }}
+          >
+            <div className="desc2">Digital</div>
+          </a>
+          <a
+            href="/images/cat2.jpeg"
+            className="portfolio-item2"
+            style={{ backgroundImage: "url('/images/cat2.jpeg')" }}
+          >
+            <div className="desc2">Digital</div>
+          </a>
+          <a
+            href="/images/anime.jpeg"
+            className="portfolio-item2"
+            style={{ backgroundImage: "url('/images/anime.jpeg')" }}
+          >
+            <div className="desc2">Digital</div>
+          </a>
+        </section>
+        {/* GALLERY ENDS HERE */}
+
+        {/* ABOUT ME SECTION STARTS HERE */}
+        <section id="about" className="about-me">
+          <div className="container">
+            <h1>About me</h1>
+            <p>
+              I'm a recent graduate of Eastern Connecticut State University,
+              where I studied anthropology. I have a passion for art and have
+              been creating it throughout my life. My main areas of expertise
+              are painting, sculpture, and figure drawing, but I am also
+              expanding my skills in digital art and animation. I am known for
+              my handmade cards which I can customize to fit any theme or
+              occasion.
+            </p>
+          </div>
+        </section>
+        {/* ABOUT ME SECTION ENDS HERE */}
+
+        {/* CONTACT FORM STARTS HERE */}
+        <section id="contact">
+          <ContactForm />
+        </section>
+        {/* CONTACT FORM ENDS HERE */}
+
+        {/* FOOTER STARTS HERE */}
+        <footer>
+          <div className="container">
+            <h1 style={{ marginTop: "10px" }}>Thank you</h1>
+            <p>@MHB</p>
+            <p>Stay Artistic</p>
+          </div>
+        </footer>
+        {/* FOOTER ENDS HERE */}
+      </body>
     </>
   );
 };
