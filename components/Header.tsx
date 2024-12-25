@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import NextLink from 'next/link';
+//@ts-nocheck
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import NextLink from "next/link";
 
 interface HeaderContainerProps {
   $isScrolled: boolean;
@@ -11,7 +12,8 @@ const HeaderContainer = styled.header<HeaderContainerProps>`
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background-color: ${props => props.$isScrolled ? '#faf5eb' : 'transparent'};
+  background-color: ${(props) =>
+    props.$isScrolled ? "#faf5eb" : "transparent"};
   transition: background-color 0.3s ease;
   position: sticky;
   top: 0;
@@ -56,9 +58,9 @@ const Header = () => {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
@@ -68,10 +70,18 @@ const Header = () => {
         <Logo src="/images/mhb-removebg-preview.png" alt="Your Logo Name" />
       </NextLink>
       <NavigationLinks>
-      <NextLink href="/#gallery" passHref><NavigationLink>gallery</NavigationLink></NextLink>
-        <NextLink href="/#about" passHref><NavigationLink>about</NavigationLink></NextLink>
-        <NextLink href="/Shop" passHref><NavigationLink>shop</NavigationLink></NextLink>
-        <NextLink href="/#contact" passHref><NavigationLink>contact</NavigationLink></NextLink>
+        <NextLink href="/#gallery" passHref>
+          <NavigationLink>gallery</NavigationLink>
+        </NextLink>
+        <NextLink href="/#about" passHref>
+          <NavigationLink>about</NavigationLink>
+        </NextLink>
+        <NextLink href="/Shop" passHref>
+          <NavigationLink>shop</NavigationLink>
+        </NextLink>
+        <NextLink href="/#contact" passHref>
+          <NavigationLink>contact</NavigationLink>
+        </NextLink>
       </NavigationLinks>
     </HeaderContainer>
   );
