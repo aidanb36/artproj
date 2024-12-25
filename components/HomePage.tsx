@@ -4,7 +4,7 @@ import ContactForm from "./Contact";
 import Header from "../components/Header";
 
 interface HomePageProps {
-  children?: ReactNode;
+  children: ReactNode;
 }
 
 const HomePage: React.FC<HomePageProps> = ({ children }) => {
