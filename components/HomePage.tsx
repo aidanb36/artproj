@@ -1,252 +1,81 @@
-//@ts-nocheck
 import Head from "next/head";
-import Image from "next/image";
-import ContactForm from "./Contact";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import NextLink from "next/link";
-import Header from "../components/Header";
+import Header from "./Header";
+import ContactForm from "./Contact";
+import { galleryItems } from "../data/gallery";
 
-const HomePage: React.FC = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = useRef(null);
+export default function HomePage() {
+  const [lightbox, setLightbox] = useState<{ src: string; medium: string } | null>(null);
 
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-  };
+  const openLightbox = useCallback((src: string, medium: string) => {
+    setLightbox({ src, medium });
+  }, []);
 
-  const handleClickOutside = (event) => {
-    if (menuRef.current && !menuRef.current.contains(event.target)) {
-      setMenuOpen(false);
-    }
-  };
+  const closeLightbox = useCallback(() => {
+    setLightbox(null);
+  }, []);
 
   useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeLightbox();
     };
-  }, []);
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [closeLightbox]);
+
   return (
     <>
       <Head>
         <link rel="stylesheet" href="/static/css/styles.css" />
-        <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>art@mhb</title>
-        <style>
-          {`
-            .gallery2 {
-              display: grid;
-              grid-template-columns: repeat(3, 1fr); /* Creates a 3-column grid */
-              grid-gap: 30px;
-              width: 100%;
-              background-color: white;
-              margin-bottom: 40px;
-              @media (max-width: 575.98px) {
-                grid-template-columns: repeat(1, 1fr); /* Creates a 3-column grid */
-              }
-
-            }
-            
-            .portfolio-item2 {
-              position: relative;
-              overflow: hidden;
-              cursor: pointer;
-              background-size: cover;
-              background-position: center;
-              transition: transform 0.3s ease-in-out;
-              margin: 15px;
-            }
-            
-            .portfolio-item2::before {
-              content: '';
-              display: block;
-              padding-top: 100%; /* This maintains a square aspect ratio */
-            }
-            
-            .desc2 {
-              position: absolute;
-              bottom: 0;
-              width: 100%;
-              text-align: center;
-              background: rgba(0, 0, 0, 0.7);
-              color: white;
-              visibility: hidden;
-              opacity: 0;
-              transition: opacity 0.3s ease-in-out;
-              padding: 10px 0;
-            }
-            
-            .portfolio-item2:hover {
-              transform: scale(1.1);
-            }
-            
-            .portfolio-item2:hover .desc2 {
-              visibility: visible;
-              opacity: 1;
-            }
-
-            .hamburger {
-              display: flex;
-              cursor: pointer;
-              flex-direction: column;
-              justify-content: space-around;
-              width: 30px;
-              height: 25px;
-              background: transparent;
-              border: none;
-              outline: none;
-              position: absolute;
-              right: 20px; /* Adjust as needed */
-              top: 20px; /* Adjust as needed */
-            }
-            
-            .hamburger span {
-              display: block;
-              width: 100%;
-              height: 3px;
-              background-color: #333;
-              z-index: 1002; /* Ensure it's above the nav */
-
-            }
-            
-            nav {
-              position: absolute;
-              right: 20px;
-              top: 60px;
-              background-color: rgba(221, 216, 216, 0.9);
-              width: 150px; /* Adjust as needed */
-              display: none;
-              z-index: 1001;
-              display: none;
-              position: absolute;
-              right: 0;
-              top: 60px;
-              z-index: 1001;
-            }
-            
-            nav ul {
-              display: block;
-              padding: 20px;
-              text-align: right;
-            }
-            
-            nav li {
-              margin-bottom: 15px;
-            }
-            
-            nav a {
-              font-size: 14px; /* Adjust font size */
-            }
-          `}
-        </style>
+        <title>art@mhb — Madeline&apos;s Portfolio</title>
+        <meta name="description" content="A collection of art pieces. Painting, sculpture, figure drawing, digital art, and handmade cards." />
       </Head>
 
-      <body>
-        <Header />
-        {/* INTRODUCTION STARTS HERE */}
-        <section id="intro" className="intro">
-          <div className="container">
-            <h1 className="moto">
-              Madeline's Portfolio <br />
-              <span>A Collection of Art Pieces</span>
-              <span>My Art. Your Design.</span>
+      <Header />
+
+      <main>
+        {/* Hero */}
+        <section className="hero" id="intro">
+          <div className="container hero__inner">
+            <h1 className="hero__title">
+              Madeline&apos;s Portfolio
             </h1>
-            <a href="/Shop" className="button">
-              Visit my Shop
-            </a>
+            <p className="hero__tagline">A collection of art pieces</p>
+            <p className="hero__sub">My Art. Your Design.</p>
+            <NextLink href="/Shop" className="btn btn--outline hero__cta">
+              Visit the shop
+            </NextLink>
           </div>
         </section>
-        {/* INTRODUCTION ENDS HERE */}
 
-        {/* GALLERY STARTS HERE */}
-        <section id="gallery" className="gallery2">
-          <a
-            href="/images/image0.jpeg"
-            className="portfolio-item2"
-            style={{ backgroundImage: "url('/images/image0.jpeg')" }}
-          >
-            <div className="desc2">Charcoal</div>
-          </a>
-          <a
-            href="/images/image1.jpeg"
-            className="portfolio-item2"
-            style={{ backgroundImage: "url('/images/image1.jpeg')" }}
-          >
-            <div className="desc2">Colored Pencil</div>
-          </a>
-          <a
-            href="/images/image2.jpeg"
-            className="portfolio-item2"
-            style={{ backgroundImage: "url('/images/image2.jpeg')" }}
-          >
-            <div className="desc2">Oil</div>
-          </a>
-          <a
-            href="/images/image4.jpeg"
-            className="portfolio-item2"
-            style={{ backgroundImage: "url('/images/image4.jpeg')" }}
-          >
-            <div className="desc2">Acrylic</div>
-          </a>
-          <a
-            href="/images/image3.jpeg"
-            className="portfolio-item2"
-            style={{ backgroundImage: "url('/images/image3.jpeg')" }}
-          >
-            <div className="desc2">Acrylic</div>
-          </a>
-          <a
-            href="/images/image5.jpeg"
-            className="portfolio-item2"
-            style={{ backgroundImage: "url('/images/image5.jpeg')" }}
-          >
-            <div className="desc2">Oil</div>
-          </a>
-          <a
-            href="/images/image6.jpeg"
-            className="portfolio-item2"
-            style={{ backgroundImage: "url('/images/image6.jpeg')" }}
-          >
-            <div className="desc2">Marker</div>
-          </a>
-          <a
-            href="/images/IMG_1194.jpg"
-            className="portfolio-item2"
-            style={{ backgroundImage: "url('/images/IMG_1194.jpg')" }}
-          >
-            <div className="desc2">Print</div>
-          </a>
-          <a
-            href="/images/bunny.jpeg"
-            className="portfolio-item2"
-            style={{ backgroundImage: "url('/images/bunny.jpeg')" }}
-          >
-            <div className="desc2">Digital</div>
-          </a>
-          <a
-            href="/images/cat2.jpeg"
-            className="portfolio-item2"
-            style={{ backgroundImage: "url('/images/cat2.jpeg')" }}
-          >
-            <div className="desc2">Digital</div>
-          </a>
-          <a
-            href="/images/anime.jpeg"
-            className="portfolio-item2"
-            style={{ backgroundImage: "url('/images/anime.jpeg')" }}
-          >
-            <div className="desc2">Digital</div>
-          </a>
-        </section>
-        {/* GALLERY ENDS HERE */}
-
-        {/* ABOUT ME SECTION STARTS HERE */}
-        <section id="about" className="about-me">
+        {/* Gallery */}
+        <section className="section gallery-section" id="gallery">
           <div className="container">
-            <h1>About me</h1>
-            <p>
-              I'm a recent graduate of Eastern Connecticut State University,
+            <h2 className="section__title">Gallery</h2>
+            <div className="gallery">
+              {galleryItems.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  className="gallery__item"
+                  onClick={() => openLightbox(item.src, item.medium)}
+                  style={{ backgroundImage: `url(${item.src})` }}
+                >
+                  <span className="gallery__label">{item.medium}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* About */}
+        <section className="section about-section" id="about">
+          <div className="container about-section__inner">
+            <h2 className="section__title">About me</h2>
+            <p className="about-section__text">
+              I&apos;m a recent graduate of Eastern Connecticut State University,
               where I studied anthropology. I have a passion for art and have
               been creating it throughout my life. My main areas of expertise
               are painting, sculpture, and figure drawing, but I am also
@@ -256,26 +85,158 @@ const HomePage: React.FC = () => {
             </p>
           </div>
         </section>
-        {/* ABOUT ME SECTION ENDS HERE */}
 
-        {/* CONTACT FORM STARTS HERE */}
-        <section id="contact">
-          <ContactForm />
-        </section>
-        {/* CONTACT FORM ENDS HERE */}
-
-        {/* FOOTER STARTS HERE */}
-        <footer>
+        {/* Contact */}
+        <section className="section contact-section" id="contact">
           <div className="container">
-            <h1 style={{ marginTop: "10px" }}>Thank you</h1>
-            <p>@MHB</p>
-            <p>Stay Artistic</p>
+            <h2 className="section__title">Get in touch</h2>
+            <ContactForm />
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="site-footer">
+          <div className="container">
+            <h2>Thank you</h2>
+            <p>@MHB · Stay Artistic</p>
           </div>
         </footer>
-        {/* FOOTER ENDS HERE */}
-      </body>
+      </main>
+
+      {/* Lightbox */}
+      {lightbox && (
+        <div
+          className="lightbox-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Image preview"
+          onClick={(e) => e.target === e.currentTarget && closeLightbox()}
+        >
+          <button
+            type="button"
+            className="lightbox-close"
+            onClick={closeLightbox}
+            aria-label="Close"
+          >
+            ×
+          </button>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={lightbox.src}
+            alt=""
+            className="lightbox-content"
+            onClick={(e) => e.stopPropagation()}
+          />
+          <span className="lightbox-caption">{lightbox.medium}</span>
+        </div>
+      )}
+
+      <style jsx>{`
+        .hero {
+          min-height: 85vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          padding: var(--space-3xl) var(--space-lg);
+          background: linear-gradient(180deg, var(--color-bg) 0%, rgba(45, 74, 62, 0.06) 100%);
+        }
+        .hero__inner {
+          max-width: 640px;
+        }
+        .hero__title {
+          font-family: var(--font-serif);
+          font-size: clamp(2.5rem, 6vw, 3.75rem);
+          margin-bottom: var(--space-sm);
+          color: var(--color-ink);
+        }
+        .hero__tagline {
+          font-size: 1.25rem;
+          color: var(--color-ink-muted);
+          margin-bottom: var(--space-xs);
+        }
+        .hero__sub {
+          font-style: italic;
+          color: var(--color-accent);
+          margin-bottom: var(--space-xl);
+        }
+        .hero__cta {
+          margin-top: var(--space-md);
+        }
+        .gallery-section {
+          background: var(--color-bg-elevated);
+        }
+        .gallery {
+          display: grid;
+          grid-template-columns: repeat(1, 1fr);
+          gap: var(--space-lg);
+        }
+        @media (min-width: 480px) {
+          .gallery { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (min-width: 768px) {
+          .gallery { grid-template-columns: repeat(3, 1fr); gap: var(--space-xl); }
+        }
+        .gallery__item {
+          position: relative;
+          aspect-ratio: 1;
+          border: none;
+          border-radius: var(--radius-md);
+          background-size: cover;
+          background-position: center;
+          cursor: pointer;
+          overflow: hidden;
+          transition: transform var(--transition), box-shadow var(--transition);
+        }
+        .gallery__item:hover {
+          transform: scale(1.02);
+          box-shadow: var(--shadow-md);
+        }
+        .gallery__item::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%);
+          opacity: 0;
+          transition: opacity var(--transition);
+        }
+        .gallery__item:hover::before {
+          opacity: 1;
+        }
+        .gallery__label {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          padding: var(--space-md);
+          font-size: 0.875rem;
+          font-weight: 600;
+          color: #fff;
+          text-align: center;
+          opacity: 0;
+          transform: translateY(4px);
+          transition: opacity var(--transition), transform var(--transition);
+        }
+        .gallery__item:hover .gallery__label {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .about-section {
+          background: var(--color-bg);
+        }
+        .about-section__inner {
+          max-width: 640px;
+          margin: 0 auto;
+        }
+        .about-section__text {
+          font-size: 1.0625rem;
+          color: var(--color-ink-muted);
+          line-height: 1.75;
+        }
+        .contact-section {
+          background: var(--color-bg-elevated);
+        }
+      `}</style>
     </>
   );
-};
-
-export default HomePage;
+}

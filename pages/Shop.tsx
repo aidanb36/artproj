@@ -1,202 +1,159 @@
-import styled, { createGlobalStyle } from "styled-components";
-import React, { useState, useRef } from "react";
-import Image from "next/image"; // Make sure you have 'next/image' installed
-import NextLink from "next/link";
+import React from "react";
 import Head from "next/head";
+import NextLink from "next/link";
 import Header from "../components/Header";
+import { shopProducts } from "../data/shop";
 
-const GridContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); // Two columns
-  gap: 20px;
-  padding: 20px;
-
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(4, 1fr); // Four columns on wider screens
-  }
-`;
-
-const ProductCard = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border: 1px solid #e0e0e0;
-  border-radius: 10px;
-  overflow: hidden;
-  transition: transform 0.3s ease;
-  background-color: white;
-  &:hover {
-    transform: scale(1.05);
-  }
-`;
-
-const ProductImage = styled.img`
-  width: 100%;
-  height: auto;
-`;
-
-const ProductInfo = styled.div`
-  padding: 10px;
-  color: black;
-  font-family: Copperplate, "Copperplate Gothic Light", fantasy;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-`;
-
-const ProductPrice = styled.p`
-  font-size: 16px;
-  margin: 0;
-`;
-
-const ContactButton = styled.button`
-  background-color: black;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  text-align: center;
-  display: block;
-  width: 100%;
-  margin-top: 10px;
-  font-family: Copperplate, "Copperplate Gothic Light", fantasy;
-
-  &:hover {
-    background-color: #00337a;
-  }
-  &:after {
-    content: "Buy on Etsy"; // Default content
-  }
-
-  @media (max-width: 768px) {
-    // Adjust breakpoint as needed
-    &:after {
-      content: "Buy One"; // Content for mobile devices
-    }
-  }
-`;
-
-const Title = styled.h1`
-  text-align: center;
-  color: black;
-  font-family: Copperplate, "Copperplate Gothic Light", fantasy;
-`;
-
-const products = [
-  {
-    imageUrl:
-      "https://i.etsystatic.com/47227300/r/il/352d39/5451556827/il_1588xN.5451556827_rxbh.jpg",
-    price: "$5.00",
-    etsyLink:
-      "https://www.etsy.com/listing/1589096793/cat-holiday-card?click_key=85c4e1aac214f38706995c3b8994be7d0d4d9dbf%3A1589096793&click_sum=d32c51b7&ref=shop_home_active_1", // Replace with actual Etsy listing link
-  },
-  {
-    imageUrl:
-      "https://i.etsystatic.com/47227300/r/il/23df50/5403382768/il_1588xN.5403382768_lmd7.jpg",
-    price: "$5.00",
-    etsyLink:
-      "https://www.etsy.com/listing/1589092177/podcats-card?click_key=c109b3ad355c582c78337dce92cd393f5116f7a2%3A1589092177&click_sum=fdc57432&ref=shop_home_active_2", // Replace with actual Etsy listing link
-  },
-  {
-    imageUrl:
-      "https://i.etsystatic.com/47227300/r/il/706af1/5451504167/il_1588xN.5451504167_50k6.jpg",
-    price: "$5.00",
-    etsyLink:
-      "https://www.etsy.com/listing/1589086855/cinnamon-roll-kitty-card?click_key=5b32a8c2f6ee24a47316c739898e765ac7459662%3A1589086855&click_sum=cb2c7a5a&ref=shop_home_active_3", // Replace with actual Etsy listing link
-  },
-  {
-    imageUrl:
-      "https://i.etsystatic.com/47227300/r/il/6018e1/5451451507/il_1588xN.5451451507_rox3.jpg",
-    price: "$5.00",
-    etsyLink:
-      "https://www.etsy.com/listing/1589078977/kitty-birthday-card?click_key=73051b2ee233f6cf1d4647fc901b8684fab9c2d5%3A1589078977&click_sum=5af45761&ref=shop_home_active_4", // Replace with actual Etsy listing link
-  },
-  {
-    imageUrl:
-      "https://i.etsystatic.com/47227300/r/il/2b83e1/6358360789/il_1588xN.6358360789_dshh.jpg",
-    price: "$5.00",
-    etsyLink:
-      "https://www.etsy.com/listing/1589096793/cat-holiday-card?click_key=85c4e1aac214f38706995c3b8994be7d0d4d9dbf%3A1589096793&click_sum=d32c51b7&ref=shop_home_active_1",
-  },
-  {
-    imageUrl:
-      "https://i.etsystatic.com/47227300/r/il/bbeba3/6310307598/il_1588xN.6310307598_ti60.jpg",
-    price: "$5.00",
-    etsyLink:
-      "https://www.etsy.com/listing/1589096793/cat-holiday-card?click_key=85c4e1aac214f38706995c3b8994be7d0d4d9dbf%3A1589096793&click_sum=d32c51b7&ref=shop_home_active_1",
-  },
-  {
-    imageUrl:
-      "https://i.etsystatic.com/47227300/r/il/e468d5/6358331917/il_1588xN.6358331917_cqc3.jpg",
-    price: "$5.00",
-    etsyLink:
-      "https://www.etsy.com/listing/1589096793/cat-holiday-card?click_key=85c4e1aac214f38706995c3b8994be7d0d4d9dbf%3A1589096793&click_sum=d32c51b7&ref=shop_home_active_1",
-  },
-  {
-    imageUrl:
-      "https://i.etsystatic.com/47227300/r/il/f54f8a/6358340959/il_1588xN.6358340959_gikj.jpg",
-    price: "$5.00",
-    etsyLink:
-      "https://www.etsy.com/listing/1589096793/cat-holiday-card?click_key=85c4e1aac214f38706995c3b8994be7d0d4d9dbf%3A1589096793&click_sum=d32c51b7&ref=shop_home_active_1",
-  },
-  {
-    imageUrl:
-      "https://i.etsystatic.com/47227300/r/il/2ac88f/6456227104/il_1588xN.6456227104_btzu.jpg",
-    price: "$5.00",
-    etsyLink:
-      "https://www.etsy.com/listing/1589096793/cat-holiday-card?click_key=85c4e1aac214f38706995c3b8994be7d0d4d9dbf%3A1589096793&click_sum=d32c51b7&ref=shop_home_active_1",
-  },
-  {
-    imageUrl:
-      "https://i.etsystatic.com/47227300/r/il/4839cc/6504342325/il_1588xN.6504342325_n3vv.jpg",
-    price: "$5.00",
-    etsyLink:
-      "https://www.etsy.com/listing/1589096793/cat-holiday-card?click_key=85c4e1aac214f38706995c3b8994be7d0d4d9dbf%3A1589096793&click_sum=d32c51b7&ref=shop_home_active_1",
-  },
-  {
-    imageUrl:
-      "https://i.etsystatic.com/47227300/r/il/98205b/6310235786/il_1588xN.6310235786_gf10.jpg",
-    price: "$5.00",
-    etsyLink:
-      "https://www.etsy.com/listing/1589096793/cat-holiday-card?click_key=85c4e1aac214f38706995c3b8994be7d0d4d9dbf%3A1589096793&click_sum=d32c51b7&ref=shop_home_active_1",
-  },
-];
-
-const Shop = () => {
+export default function Shop() {
   return (
-    <div>
+    <>
+      <Head>
+        <link rel="stylesheet" href="/static/css/styles.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Shop — art@mhb</title>
+        <meta name="description" content="Handmade cards and art by Madeline. Custom cards for any occasion." />
+      </Head>
       <Header />
-      <Title>My Card Shop</Title>
-      <GridContainer>
-        {products.map((product, index) => (
-          <ProductCard key={index}>
-            <ProductImage src={product.imageUrl} alt="Product Image" />
-            <ProductInfo>
-              <ProductPrice>{product.price}</ProductPrice>
-              <a
-                href={product.etsyLink}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <ContactButton></ContactButton>
-              </a>
-            </ProductInfo>
-          </ProductCard>
-        ))}
-      </GridContainer>
 
-      {/* FOOTER STARTS HERE */}
-      <footer>
-        <div className="container">
-          <h1 style={{ marginTop: "10px" }}>Thank you</h1>
-          <p>@MHB</p>
-          <p>Stay Artistic</p>
-        </div>
-      </footer>
-    </div>
+      <main className="shop-page">
+        <section className="section shop-hero">
+          <div className="container">
+            <h1 className="shop-hero__title">Card Shop</h1>
+            <p className="shop-hero__sub">Handmade cards for every occasion</p>
+          </div>
+        </section>
+
+        <section className="section shop-grid-section">
+          <div className="container">
+            <div className="shop-grid">
+              {shopProducts.map((product) => (
+                <article key={product.id} className="shop-card">
+                  <a
+                    href={product.etsyLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="shop-card__link"
+                  >
+                    <div className="shop-card__image-wrap">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={product.imageUrl}
+                        alt={product.title || "Handmade card"}
+                        className="shop-card__image"
+                      />
+                    </div>
+                    <div className="shop-card__info">
+                      <span className="shop-card__price">{product.price}</span>
+                      <span className="shop-card__cta">View on Etsy</span>
+                    </div>
+                  </a>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <footer className="site-footer">
+          <div className="container">
+            <h2>Thank you</h2>
+            <p>@MHB · Stay Artistic</p>
+            <NextLink href="/" className="site-footer__home">
+              Back to gallery
+            </NextLink>
+          </div>
+        </footer>
+      </main>
+
+      <style jsx>{`
+        .shop-page {
+          min-height: 100vh;
+        }
+        .shop-hero {
+          text-align: center;
+          padding-top: var(--space-2xl);
+          padding-bottom: var(--space-lg);
+        }
+        .shop-hero__title {
+          font-family: var(--font-serif);
+          font-size: clamp(2rem, 4vw, 2.75rem);
+          margin-bottom: var(--space-xs);
+        }
+        .shop-hero__sub {
+          color: var(--color-ink-muted);
+          font-size: 1.125rem;
+        }
+        .shop-grid-section {
+          padding-top: 0;
+        }
+        .shop-grid {
+          display: grid;
+          grid-template-columns: repeat(1, 1fr);
+          gap: var(--space-xl);
+        }
+        @media (min-width: 480px) {
+          .shop-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (min-width: 768px) {
+          .shop-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (min-width: 1024px) {
+          .shop-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+        .shop-card {
+          background: var(--color-bg-elevated);
+          border-radius: var(--radius-lg);
+          overflow: hidden;
+          border: 1px solid var(--color-border);
+          transition: box-shadow var(--transition), transform var(--transition);
+        }
+        .shop-card:hover {
+          box-shadow: var(--shadow-md);
+          transform: translateY(-2px);
+        }
+        .shop-card__link {
+          display: block;
+          text-decoration: none;
+          color: inherit;
+        }
+        .shop-card__image-wrap {
+          aspect-ratio: 1;
+          overflow: hidden;
+          background: var(--color-border);
+        }
+        .shop-card__image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+        }
+        .shop-card__info {
+          padding: var(--space-md);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .shop-card__price {
+          font-weight: 600;
+          color: var(--color-ink);
+        }
+        .shop-card__cta {
+          font-size: 0.875rem;
+          font-weight: 500;
+          color: var(--color-accent);
+        }
+        .shop-card__link:hover .shop-card__cta {
+          text-decoration: underline;
+        }
+        .site-footer__home {
+          display: inline-block;
+          margin-top: var(--space-md);
+          font-size: 0.875rem;
+          color: rgba(255,255,255,0.9);
+        }
+        .site-footer__home:hover {
+          color: #fff;
+        }
+      `}</style>
+    </>
   );
-};
-
-export default Shop;
+}

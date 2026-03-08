@@ -1,217 +1,183 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useState, FormEvent, ChangeEvent } from "react";
 
-const FormContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 20px;
-  background-color: var(--light); // white background
-  border-radius: 10px;
-  box-shadow: var(--shadow);
-  max-width: 600px;
-  width: 100%; 
-  font-family: Copperplate, "Copperplate Gothic Light", fantasy;
-  color: var(--dark); // dark text color
-  margin-bottom: 20px;
-  margin-top: 20px;
-`;
-
-const StyledForm = styled.form`
-  width: 95%;
-`;
-
-const StyledInput = styled.input`
-  width: 90%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-bottom: 1px solid var(--dark); // border style from the inspiration
-  background-color: var(--light); // white background
-  font-size: 16px;
-  font-family: inherit;
-  color: var(--dark);
-
-  &::placeholder {
-    color: var(--primary);
-  }
-  &:focus {
-    outline: none;
-    border-color: var(--primary); // focus color
-  }
-`;
-
-const StyledTextArea = styled.textarea`
-  width: 90%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid var(--dark); // consistent with the inspiration
-  border-radius: 5px;
-  font-size: 16px;
-  resize: vertical;
-  min-height: 150px;
-  background-color: var(--light); // white background
-  color: var(--dark);
-  &::placeholder {
-    color: var(--primary);
-  }
-  &:focus {
-    outline: none;
-    border-color: var(--primary); // focus color
-  }
-`;
-
-const StyledButton = styled.button`
-  padding: 10px 15px;
-  background-color: var(--primary); // button color from the inspiration
-  color: var(--dark);
-  border: 1px solid var(--dark); // border style from the inspiration
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  font-family: inherit;
-  &:hover {
-    background-color: var(--dark); // hover effect from the inspiration
-    color: var(--light);
-  }
-`;
-
-const StyledImage = styled.img`
-  width: 300px;
-  max-width: 80%;
-  height: 500px;
-  margin: 0px 0;
-  @media (max-width: 767px) { 
-    &:nth-child(2) {
-      display: none;
-    }
-  }
-`;
-
-const FlexWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center; // Center items horizontally
-  justify-content: center; // Center items vertically
-  gap: 20px;
-  @media (min-width: 768px) { 
-    flex-direction: row;
-    align-items: flex-start;
-  }
-`;
-
-const ContactForm = () => {
+export default function ContactForm() {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
+    name: "",
+    email: "",
+    message: "",
   });
+  const [status, setStatus] = useState<{
+    submitting: boolean;
+    message: string | null;
+    success: boolean;
+  }>({ submitting: false, message: null, success: false });
 
-  // New state variables for form status feedback
-  const [formStatus, setFormStatus] = useState({
-    submitting: false,
-    message: null,
-    success: false,
-  });
+  const accessKey =
+    process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY ||
+    process.env.REACT_APP_API_ACCESS_KEY;
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const apiAccessKey = process.env.REACT_APP_API_ACCESS_KEY;
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setFormStatus({ submitting: true, message: null, success: false });
-
-    // Prepare formData for the API
-    const dataToSend = JSON.stringify({
-      ...formData,
-      access_key: "06417931-9590-47d7-8d85-99483f7cedad" // replace with your actual access key
-    });
+    if (!accessKey) {
+      setStatus({
+        submitting: false,
+        message: "Contact form is not configured. Please set NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY.",
+        success: false,
+      });
+      return;
+    }
+    setStatus({ submitting: true, message: null, success: false });
 
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
+      const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: dataToSend,
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          ...formData,
+          access_key: accessKey,
+        }),
       });
-
-      const result = await response.json();
+      const result = await res.json();
 
       if (result.success) {
-        // Form submitted successfully
-        setFormStatus({
+        setStatus({
           submitting: false,
-          message: "Your message has been sent successfully!",
+          message: "Your message has been sent. I'll get back to you soon!",
           success: true,
         });
-        // Clear the form
-        setFormData({ name: '', email: '', message: '' });
+        setFormData({ name: "", email: "", message: "" });
       } else {
-        // The server responded with some issue
-        throw new Error(result.message);
+        throw new Error(result.message || "Something went wrong.");
       }
-    } catch (error) {
-      // An error occurred during the submission
-      setFormStatus({
+    } catch (err) {
+      setStatus({
         submitting: false,
-        message: error.message || "An error occurred, please try again.",
+        message: err instanceof Error ? err.message : "Something went wrong. Please try again.",
         success: false,
       });
     }
   };
 
   return (
-    <FlexWrapper>
-  <FormContainer>
-    <h2 style={{ textTransform: 'uppercase' }}>request a quote</h2>
-
-        {/* Display submission status to the user */}
-        {formStatus.message && (
-          <div style={{ color: formStatus.success ? "lightgreen" : "tomato" }}>
-            {formStatus.message}
-          </div>
-        )}
-
-        <StyledForm onSubmit={handleSubmit}>
-          <StyledInput
-            type="text"
-            name="name"
-            placeholder="Your Name"
-            value={formData.name}
-            onChange={handleChange}
-            required // Add required flag to ensure the input is filled
-          />
-          <StyledInput
-            type="email"
-            name="email"
-            placeholder="Your Email"
-            value={formData.email}
-            onChange={handleChange}
-            required // Validates the input field for valid email formats
-          />
-          <StyledTextArea
-            name="message"
-            placeholder="Your Message"
-            value={formData.message}
-            onChange={handleChange}
-            required
-          />
-          <StyledButton type="submit" disabled={formStatus.submitting}>
-            {formStatus.submitting ? "Sending..." : "Send"}
-          </StyledButton>
-        </StyledForm>
-      </FormContainer>
-      {/* Images commented out previously can be added here */}
-    </FlexWrapper>
+    <div className="contact-form">
+      {status.message && (
+        <div
+          className={`contact-form__feedback ${status.success ? "contact-form__feedback--success" : "contact-form__feedback--error"}`}
+          role="alert"
+        >
+          {status.message}
+        </div>
+      )}
+      <form onSubmit={handleSubmit} className="contact-form__form">
+        <label htmlFor="contact-name" className="contact-form__label">
+          Name
+        </label>
+        <input
+          id="contact-name"
+          type="text"
+          name="name"
+          placeholder="Your name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+          className="contact-form__input"
+        />
+        <label htmlFor="contact-email" className="contact-form__label">
+          Email
+        </label>
+        <input
+          id="contact-email"
+          type="email"
+          name="email"
+          placeholder="your@email.com"
+          value={formData.email}
+          onChange={handleChange}
+          required
+          className="contact-form__input"
+        />
+        <label htmlFor="contact-message" className="contact-form__label">
+          Message
+        </label>
+        <textarea
+          id="contact-message"
+          name="message"
+          placeholder="Your message..."
+          value={formData.message}
+          onChange={handleChange}
+          required
+          rows={5}
+          className="contact-form__textarea"
+        />
+        <button
+          type="submit"
+          disabled={status.submitting}
+          className="btn btn--primary contact-form__submit"
+        >
+          {status.submitting ? "Sending…" : "Send message"}
+        </button>
+      </form>
+      <style jsx>{`
+        .contact-form {
+          max-width: 480px;
+          margin: 0 auto;
+          padding: var(--space-xl);
+          background: var(--color-bg);
+          border-radius: var(--radius-lg);
+          border: 1px solid var(--color-border);
+        }
+        .contact-form__feedback {
+          padding: var(--space-md);
+          border-radius: var(--radius-sm);
+          margin-bottom: var(--space-lg);
+          font-size: 0.9375rem;
+        }
+        .contact-form__feedback--success {
+          background: rgba(26, 95, 74, 0.12);
+          color: var(--color-success);
+        }
+        .contact-form__feedback--error {
+          background: rgba(179, 58, 58, 0.1);
+          color: var(--color-error);
+        }
+        .contact-form__form {
+          display: flex;
+          flex-direction: column;
+          gap: var(--space-sm);
+        }
+        .contact-form__label {
+          font-size: 0.875rem;
+          font-weight: 600;
+          color: var(--color-ink);
+        }
+        .contact-form__input,
+        .contact-form__textarea {
+          width: 100%;
+          padding: 0.75rem 1rem;
+          font-family: var(--font-sans);
+          font-size: 1rem;
+          border: 1px solid var(--color-border);
+          border-radius: var(--radius-sm);
+          background: var(--color-bg-elevated);
+          color: var(--color-ink);
+          transition: border-color var(--transition);
+        }
+        .contact-form__input:focus,
+        .contact-form__textarea:focus {
+          outline: none;
+          border-color: var(--color-accent);
+        }
+        .contact-form__textarea {
+          resize: vertical;
+          min-height: 120px;
+        }
+        .contact-form__submit {
+          margin-top: var(--space-md);
+        }
+      `}</style>
+    </div>
   );
-};
-
-export default ContactForm;
+}

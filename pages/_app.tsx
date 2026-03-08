@@ -1,7 +1,6 @@
-import '../public/static/css/styles.css'; // Adjust the path if necessary
+import type { AppProps } from "next/app";
+import "../public/static/css/styles.css";
 
-function MyApp({ Component, pageProps }) {
+export default function App({ Component, pageProps }: AppProps) {
   return <Component {...pageProps} />;
 }
-
-export default MyApp;
