@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import NextLink from "next/link";
 import Image from "next/image";
+import { useTheme } from "../contexts/ThemeContext";
 
 const navLinks = [
   { href: "/#gallery", label: "Gallery" },
@@ -12,6 +13,7 @@ const navLinks = [
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -30,16 +32,18 @@ export default function Header() {
       <header
         className="site-header"
         data-scrolled={scrolled}
+        data-theme={theme}
         role="banner"
       >
         <div className="site-header__inner container">
-          <NextLink href="/" className="site-header__logo" aria-label="Home">
+          <NextLink href="/" className="site-header__logo header-logo" aria-label="Home">
             <Image
               src="/images/mhb-removebg-preview.png"
               alt="MHB"
               width={120}
               height={40}
               priority
+              className="header-logo__img"
             />
           </NextLink>
 
@@ -54,6 +58,22 @@ export default function Header() {
               ))}
             </ul>
           </nav>
+
+          <div className="site-header__actions">
+            <button
+              type="button"
+              className="site-header__theme-btn"
+              onClick={toggleTheme}
+              aria-label={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
+              title={theme === "light" ? "Dark mode" : "Light mode"}
+            >
+              {theme === "light" ? (
+                <span className="site-header__theme-icon" aria-hidden>🌙</span>
+              ) : (
+                <span className="site-header__theme-icon" aria-hidden>☀️</span>
+              )}
+            </button>
+          </div>
 
           <button
             type="button"
@@ -84,6 +104,19 @@ export default function Header() {
               </NextLink>
             </li>
           ))}
+          <li className="site-header__mobile-theme">
+            <button
+              type="button"
+              className="site-header__mobile-theme-btn"
+              onClick={() => { toggleTheme(); setMenuOpen(false); }}
+              aria-label={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
+            >
+              <span className="site-header__theme-icon" aria-hidden>
+                {theme === "light" ? "🌙" : "☀️"}
+              </span>
+              <span>{theme === "light" ? "Dark mode" : "Light mode"}</span>
+            </button>
+          </li>
         </ul>
       </div>
 
@@ -92,7 +125,7 @@ export default function Header() {
           position: sticky;
           top: 0;
           z-index: 100;
-          background: rgba(250, 249, 246, 0.85);
+          background: var(--color-header-bg);
           backdrop-filter: saturate(180%) blur(12px);
           border-bottom: 1px solid transparent;
           transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -115,13 +148,49 @@ export default function Header() {
         .site-header__logo :global(img) {
           height: 40px;
           width: auto;
+          transition: filter var(--transition);
+        }
+        .site-header__actions {
+          display: flex;
+          align-items: center;
+          gap: var(--space-md);
+        }
+        @media (max-width: 767px) {
+          .site-header__actions { display: none; }
+        }
+        .site-header__theme-btn {
+          width: 40px;
+          height: 40px;
+          padding: 0;
+          border: none;
+          border-radius: var(--radius-sm);
+          background: transparent;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background var(--transition);
+        }
+        .site-header__theme-btn:hover {
+          background: var(--color-border);
+        }
+        .site-header__theme-icon {
+          font-size: 1.25rem;
+          line-height: 1;
         }
         .site-header__nav {
           display: none;
         }
+        .site-header__menu-btn {
+          display: none;
+        }
+        @media (max-width: 767px) {
+          .site-header__menu-btn {
+            display: flex;
+          }
+        }
         @media (min-width: 768px) {
           .site-header__nav { display: block; }
-          .site-header__menu-btn { display: none; }
         }
         .site-header__links {
           list-style: none;
@@ -145,7 +214,6 @@ export default function Header() {
           border: none;
           background: none;
           cursor: pointer;
-          display: flex;
           flex-direction: column;
           justify-content: center;
           gap: 6px;
@@ -219,6 +287,29 @@ export default function Header() {
           color: var(--color-ink);
         }
         .site-header__mobile-links a:hover {
+          color: var(--color-accent);
+        }
+        .site-header__mobile-theme {
+          border-bottom: none;
+          margin-top: var(--space-xs);
+        }
+        .site-header__mobile-theme-btn {
+          display: flex;
+          align-items: center;
+          gap: var(--space-sm);
+          width: 100%;
+          padding: var(--space-md);
+          font-family: var(--font-sans);
+          font-size: 1rem;
+          font-weight: 500;
+          color: var(--color-ink);
+          background: none;
+          border: none;
+          cursor: pointer;
+          text-align: left;
+          transition: color var(--transition);
+        }
+        .site-header__mobile-theme-btn:hover {
           color: var(--color-accent);
         }
       `}</style>

@@ -27,6 +27,34 @@
   --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
   --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
   --transition: 0.2s ease;
+  --color-header-bg: rgba(250, 249, 246, 0.9);
+}
+
+/* Dark mode — dark emerald green */
+[data-theme="dark"] {
+  --color-bg: #0c2418;
+  --color-bg-elevated: #123d2a;
+  --color-ink: #e8f0ec;
+  --color-ink-muted: #8fa89a;
+  --color-accent: #52c48a;
+  --color-accent-hover: #6dd4a0;
+  --color-border: #1e3d2f;
+  --color-success: #52c48a;
+  --color-error: #f08080;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.35);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.4);
+  --color-header-bg: rgba(12, 36, 24, 0.92);
+}
+
+[data-theme="dark"] .hero {
+  background: linear-gradient(180deg, var(--color-bg) 0%, rgba(82, 196, 138, 0.06) 100%);
+}
+
+/* Logo: force light/white in dark mode so it’s visible on dark background */
+[data-theme="dark"] .header-logo img,
+[data-theme="dark"] .header-logo__img {
+  filter: brightness(0) invert(1);
 }
 
 * {
@@ -126,21 +154,31 @@ a:hover {
 /* Footer */
 .site-footer {
   background: var(--color-ink);
-  color: rgba(255,255,255,0.85);
+  color: var(--color-bg);
   text-align: center;
   padding: var(--space-2xl) var(--space-lg);
   margin-top: var(--space-3xl);
 }
 
+[data-theme="dark"] .site-footer {
+  background: #061510;
+  color: var(--color-ink);
+}
+
 .site-footer h2 {
   font-size: 1.25rem;
   margin-bottom: var(--space-sm);
-  color: #fff;
+  color: inherit;
 }
 
 .site-footer p {
   font-size: 0.875rem;
   opacity: 0.9;
+}
+
+.site-footer a {
+  color: inherit;
+  text-decoration: underline;
 }
 
 /* Lightbox */
